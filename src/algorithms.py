@@ -14,8 +14,6 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 16)
 arr = list(range(1,51))
 arr = [random.randint(-99,99) for _ in range(50)]
-delay = 50
-print(arr)
 
 def draw():
     screen.fill(BACKGROUD_COLOUR)
@@ -35,7 +33,7 @@ def draw():
                 pygame.draw.rect(screen, BLACK, pygame.Rect(x, y, block_size, block_size), 1)
     pygame.display.update()
 
-def draw_selection_sort(arr, order_array_len=len(arr), i=-1, j=-1):
+def draw_selection_sort(arr, order_array_len=len(arr), i=-1, j=-1, delay=50):
     screen.fill(BACKGROUD_COLOUR)
     index = 0
     for x in range(block_size, block_size*(len(arr)+1), block_size):
@@ -56,7 +54,7 @@ def draw_selection_sort(arr, order_array_len=len(arr), i=-1, j=-1):
         index += 1
     pygame.display.update()
 
-def draw_merge_sort(arr, start=0, end=len(arr)-1, mid=-1, i=-1, j=-1, k=-1, arr_=[], left=[], right=[], all_green=False):
+def draw_merge_sort(arr, start=0, end=len(arr)-1, mid=-1, i=-1, j=-1, k=-1, arr_=[], left=[], right=[], delay=50, all_green=False):
     screen.fill(BACKGROUD_COLOUR)
     index = 0
     y = screen.get_height() // 2 - 1*block_size
@@ -122,7 +120,7 @@ def draw_merge_sort(arr, start=0, end=len(arr)-1, mid=-1, i=-1, j=-1, k=-1, arr_
     pygame.display.update()
 
 
-def draw_quick_sort(arr, start=-1, end=-1, pi=-1, all_green=False):
+def draw_quick_sort(arr, start=-1, end=-1, pi=-1, delay=50,all_green=False):
     screen.fill(BACKGROUD_COLOUR)
     index = 0
     for x in range(block_size, block_size*(len(arr)+1), block_size):
@@ -147,7 +145,7 @@ def draw_quick_sort(arr, start=-1, end=-1, pi=-1, all_green=False):
     pygame.display.update()
 
 
-def selection_sort(arr):
+def selection_sort(arr, delay=50):
     ordered_array_len = 0
     for i in range(len(arr)):
         min_index = i
@@ -161,7 +159,7 @@ def selection_sort(arr):
         ordered_array_len += 1
         pygame.time.wait(delay)
 
-def merge(arr, start, end, mid):
+def merge(arr, start, end, mid, delay=50):
     left = arr[start:mid+1]
     right = arr[mid+1:end+1]
     arr_ = arr[start:end+1]
@@ -196,7 +194,7 @@ def merge(arr, start, end, mid):
     return arr
         
 
-def merge_sort(arr, start, end):
+def merge_sort(arr, start, end, delay=50):
     if end <= start:
         return arr
     mid  = start + (end-start)// 2
@@ -205,7 +203,7 @@ def merge_sort(arr, start, end):
     merge(arr, start, end, mid)
     return arr
 
-def partition(arr, start, end):
+def partition(arr, start, end, delay=50):
     pivot_index = start
     pivot = arr[start]
     while start < end:
@@ -226,34 +224,36 @@ def partition(arr, start, end):
     pygame.time.wait(delay)
     return end
 
-def quick_sort(arr, start, end):
+def quick_sort(arr, start, end, delay=50):
     if start < end:
-        pi = partition(arr, start, end)
-        quick_sort(arr, start, pi-1)
-        quick_sort(arr, pi + 1, end)
+        pi = partition(arr, start, end, delay)
+        quick_sort(arr, start, pi-1, delay)
+        quick_sort(arr, pi + 1, end, delay)
     return arr
 
-running = True 
-#t = time.time()
-while running:
-    clock.tick(24)
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-        if sorted(arr) != arr:
-            #arr = merge_sort(arr, 0, len(arr)-1)
-            #selection_sort(arr)
-            arr = quick_sort(arr, 0, len(arr)-1)
-        else:
-            #draw_merge_sort(arr,all_green=True)
-            #draw_selection_sort(arr)
-            draw_quick_sort(arr, all_green=True)
-            #print(time.time()-t)
-            #print(arr)
-            #running = False
-            #break
+if __name__ == "__main__":
+    running = True 
+    #t = time.time()
+    while running:
+        clock.tick(24)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if sorted(arr) != arr:
+                #arr = merge_sort(arr, 0, len(arr)-1)
+                #selection_sort(arr)
+                arr = quick_sort(arr, 0, len(arr)-1)
+            else:
+                #draw_merge_sort(arr,all_green=True)
+                #draw_selection_sort(arr)
+                draw_quick_sort(arr, all_green=True)
+                #print(time.time()-t)
+                #print(arr)
+                #running = False
+                #break
 
 
 
