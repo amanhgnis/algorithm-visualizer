@@ -1,9 +1,6 @@
-from numpy import block
 import pygame
 from consts import *
-import numpy as np
 import random
-import time
     
 pygame.init()
 pygame.display.set_caption("Algorithm Visualizer")
@@ -15,23 +12,6 @@ font = pygame.font.Font(None, 16)
 arr = list(range(1,51))
 arr = [random.randint(-99,99) for _ in range(50)]
 
-def draw():
-    screen.fill(BACKGROUD_COLOUR)
-    index = 0
-    for x in range(0, screen.get_width(), block_size):
-        for y in range(0, screen.get_height(), block_size):
-            if y == (screen.get_height() - block_size)//2 and x >= block_size and x<= len(arr)*block_size:
-                rect = pygame.Rect(x, y, block_size, block_size)
-                text_rect = pygame.Rect((x+block_size//4), (y+block_size//4), block_size, block_size)
-                pygame.draw.rect(screen, BLACK, rect, 0)
-                text = font.render(f"{arr[index]}", True, BACKGROUD_COLOUR)
-                text_rect = text.get_rect()
-                text_rect.center = rect.center
-                screen.blit(text, text_rect)
-                index += 1
-            else:
-                pygame.draw.rect(screen, BLACK, pygame.Rect(x, y, block_size, block_size), 1)
-    pygame.display.update()
 
 def draw_selection_sort(arr, order_array_len=len(arr), i=-1, j=-1, delay=50):
     screen.fill(BACKGROUD_COLOUR)
