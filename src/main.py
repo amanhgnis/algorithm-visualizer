@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 16)
 arr = list(range(1,51))
 arr = [random.randint(-99,99) for _ in range(50)]
-delay = 100
+delay = 50
 print(arr)
 
 def draw():
@@ -56,7 +56,7 @@ def draw_selection_sort(arr, order_array_len=len(arr), i=-1, j=-1):
         index += 1
     pygame.display.update()
 
-def draw_merge_sort(arr, start=0, end=len(arr)-1,mid=-1, i=-1, j=-1, k=-1, arr_=[], left=[], right=[], all_green=False):
+def draw_merge_sort(arr, start=0, end=len(arr)-1, mid=-1, i=-1, j=-1, k=-1, arr_=[], left=[], right=[], all_green=False):
     screen.fill(BACKGROUD_COLOUR)
     index = 0
     y = screen.get_height() // 2 - 1*block_size
@@ -121,6 +121,32 @@ def draw_merge_sort(arr, start=0, end=len(arr)-1,mid=-1, i=-1, j=-1, k=-1, arr_=
 
     pygame.display.update()
 
+
+def draw_quick_sort(arr, start=-1, end=-1, pi=-1, all_green=False):
+    screen.fill(BACKGROUD_COLOUR)
+    index = 0
+    for x in range(block_size, block_size*(len(arr)+1), block_size):
+        y = screen.get_height() // 2 - 1*block_size
+        rect = pygame.Rect(x, y, block_size, block_size)
+        text_rect = rect
+        if not all_green:
+            if index == start:
+                pygame.draw.rect(screen, RED, rect, 0)
+            if index == end:
+                pygame.draw.rect(screen, BLUE, rect, 0)
+            if index == pi:
+                pygame.draw.rect(screen, GREEN, rect, 0)
+        else:
+            pygame.draw.rect(screen, GREEN, rect, 0)
+        pygame.draw.rect(screen, BLACK, rect, 1)
+        text = font.render(f"{arr[index]}", True, BLACK)
+        text_rect = text.get_rect()
+        text_rect.center = rect.center
+        screen.blit(text, text_rect)
+        index += 1
+    pygame.display.update()
+
+
 def selection_sort(arr):
     ordered_array_len = 0
     for i in range(len(arr)):
@@ -179,6 +205,34 @@ def merge_sort(arr, start, end):
     merge(arr, start, end, mid)
     return arr
 
+def partition(arr, start, end):
+    pivot_index = start
+    pivot = arr[start]
+    while start < end:
+        while start < len(arr) and arr[start] <= pivot:
+            draw_quick_sort(arr, start, end, pi=pivot_index)
+            pygame.time.wait(delay)
+            start += 1
+        while arr[end] > pivot:
+            draw_quick_sort(arr, start, end, pi=pivot_index)
+            pygame.time.wait(delay)
+            end -= 1
+        if start < end:
+            draw_quick_sort(arr, start, end, pi=pivot_index)
+            pygame.time.wait(delay)
+            arr[start], arr[end] = arr[end], arr[start]
+    arr[pivot_index], arr[end] = arr[end], arr[pivot_index]
+    draw_quick_sort(arr, start, end, pi=pivot_index)
+    pygame.time.wait(delay)
+    return end
+
+def quick_sort(arr, start, end):
+    if start < end:
+        pi = partition(arr, start, end)
+        quick_sort(arr, start, pi-1)
+        quick_sort(arr, pi + 1, end)
+    return arr
+
 running = True 
 #t = time.time()
 while running:
@@ -190,10 +244,12 @@ while running:
 
         if sorted(arr) != arr:
             #arr = merge_sort(arr, 0, len(arr)-1)
-            selection_sort(arr)
+            #selection_sort(arr)
+            arr = quick_sort(arr, 0, len(arr)-1)
         else:
             #draw_merge_sort(arr,all_green=True)
-            draw_selection_sort(arr)
+            #draw_selection_sort(arr)
+            draw_quick_sort(arr, all_green=True)
             #print(time.time()-t)
             #print(arr)
             #running = False
