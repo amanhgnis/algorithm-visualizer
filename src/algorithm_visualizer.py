@@ -35,9 +35,18 @@ class AlgorithmVisualizer:
 
         pygame.draw.rect(self.screen, BACKGROUD_COLOUR, reset_button, 1, border_radius=3)
         pygame.draw.rect(self.screen, BACKGROUD_COLOUR, play_button, 1, border_radius=3)
-        pygame.draw.rect(self.screen, BACKGROUD_COLOUR, selection_sort_button, 1, border_radius=3)
-        pygame.draw.rect(self.screen, BACKGROUD_COLOUR, merge_sort_button, 1, border_radius=3)
-        pygame.draw.rect(self.screen, BACKGROUD_COLOUR, quick_sort_button, 1, border_radius=3)
+        if self.algorithm == "selection sort":
+            pygame.draw.rect(self.screen, BLUE, selection_sort_button, 0, border_radius=3)
+        else:
+            pygame.draw.rect(self.screen, BACKGROUD_COLOUR, selection_sort_button, 1, border_radius=3)
+        if self.algorithm == "merge sort":
+            pygame.draw.rect(self.screen, BLUE, merge_sort_button, 0, border_radius=3)
+        else:
+            pygame.draw.rect(self.screen, BACKGROUD_COLOUR, merge_sort_button, 1, border_radius=3)
+        if self.algorithm == "quick sort":
+            pygame.draw.rect(self.screen, BLUE, quick_sort_button, 0, border_radius=3)
+        else:
+            pygame.draw.rect(self.screen, BACKGROUD_COLOUR, quick_sort_button, 1, border_radius=3)
 
         text_rect = reset_button
         text = self.font.render(f"RESET", True, BACKGROUD_COLOUR)
@@ -71,9 +80,21 @@ class AlgorithmVisualizer:
  
         pos = pygame.mouse.get_pos()
         if reset_button.collidepoint(pos):
+            pygame.draw.rect(self.screen, BACKGROUD_COLOUR, reset_button, 0, border_radius=3)
+            text_rect = reset_button
+            text = self.font.render(f"RESET", True, GREY)
+            text_rect = text.get_rect()
+            text_rect.center = reset_button.center
+            self.screen.blit(text, text_rect)
             if pygame.mouse.get_pressed()[0]:
                 self.reset_arr()
         if play_button.collidepoint(pos):
+            pygame.draw.rect(self.screen, BACKGROUD_COLOUR, play_button, 0, border_radius=3)
+            text_rect = play_button
+            text = self.font.render(f"PLAY", True, GREY)
+            text_rect = text.get_rect()
+            text_rect.center = play_button.center
+            self.screen.blit(text, text_rect)
             if pygame.mouse.get_pressed()[0]:
                 self.sort = True
         if selection_sort_button.collidepoint(pos):
@@ -145,6 +166,8 @@ class AlgorithmVisualizer:
                 self.screen.blit(text, text_rect)
             index += 1
 
+        
+
 
         index = 0
         for x in range(self.block_size, self.block_size*(len(arr_)+1), self.block_size):
@@ -157,9 +180,17 @@ class AlgorithmVisualizer:
             self.screen.blit(text, text_rect)
             index += 1
 
+
+        left_text = pygame.Rect(self.block_size, y + 4*self.block_size, 4*self.block_size, self.block_size)
+        text_rect = left_text
+        text = self.font.render(f"LEFT SUBARRAY", True, BLACK)
+        text_rect = text.get_rect()
+        text_rect.center = left_text.center
+        self.screen.blit(text, text_rect)
+
         index = 0
         for x in range(self.block_size, self.block_size*(len(left)+1), self.block_size):
-            rect_below = pygame.Rect(x, y + 4*self.block_size, self.block_size, self.block_size)
+            rect_below = pygame.Rect(x + 5*self.block_size, y + 4*self.block_size, self.block_size, self.block_size)
             text_rect = rect_below 
             if index == i:
                 pygame.draw.rect(self.screen, RED, rect_below, 0)
@@ -171,9 +202,18 @@ class AlgorithmVisualizer:
             self.screen.blit(text, text_rect)
             index += 1
 
+
+        right_text = pygame.Rect(self.block_size, y + 6*self.block_size, 4*self.block_size, self.block_size)
+        text_rect = right_text
+        text = self.font.render(f"RIGHT SUBARRAY", True, BLACK)
+        text_rect = text.get_rect()
+        text_rect.center = right_text.center
+        self.screen.blit(text, text_rect)
+
+
         index = 0
         for x in range(self.block_size, self.block_size*(len(right)+1), self.block_size):
-            rect_below = pygame.Rect(x, y + 6*self.block_size, self.block_size, self.block_size)
+            rect_below = pygame.Rect(x + 5*self.block_size, y + 6*self.block_size, self.block_size, self.block_size)
             text_rect = rect_below 
             if index == j:
                 pygame.draw.rect(self.screen, BLUE, rect_below, 0)
@@ -336,7 +376,7 @@ class AlgorithmVisualizer:
 
 
 def main():
-    app = AlgorithmVisualizer(delay=10)
+    app = AlgorithmVisualizer(delay=25)
     app.run()
 
 if __name__ == "__main__":
